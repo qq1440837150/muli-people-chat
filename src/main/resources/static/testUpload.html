@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.5.1.js">
+    </script>
+    <script>
+        $(function () {
+            $("#submit").click(function () {
+                var formData = new FormData();
+                formData.append("multipartFile",$("#multipartFile")[0].files[0]);
+                console.log(formData);
+                $.ajax({
+                    type:"POST",
+                    url:"http://localhost:9090/uploadPicture",
+                    mimeType:"multipart/form-data",
+                    cache:false,
+                    processData:false,
+                    contentType:false,
+                    data:formData,
+                    success:function (msg) {
+                        console.log(msg);
+                        $("#showImg").attr("src","img/"+msg);
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<form action="/uploadPicture" method="post" enctype="multipart/form-data">
+    <input type="file" name="multipartFile" id="multipartFile"/>
+    <input type="submit" value="提交" />
+
+</form>
+<button id="submit">提交</button>
+<IMG id="showImg" style="border-radius: 25px;border: none;" width="50px" height="50px" SRC="file:/E:/java/学习笔记/web服务器/picture/pic1599625962095.jpg">
+<IMG id="showImg"  width="100px" height="100px" SRC="file:/E:/java/学习笔记/web服务器/picture/pic1599625962095.jpg">
+
+</body>

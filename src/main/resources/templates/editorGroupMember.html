@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改权限</title>
+</head>
+<body>
+<div align="center">
+    <form method="post" th:action="@{/editorGroupMember}" th:object="${groupUserRelative}">
+        <table>
+            <tr>
+                <td>群组id：</td><td><input type="text" th:field="*{groupId}" readonly="readonly"/></td>
+            </tr>
+            <tr>
+                <td>用户id：</td><td><input type="text" th:field="*{userId}" readonly="readonly"/></td>
+            </tr>
+            <tr>
+                <td>权限：</td><td><input type="text" th:field="*{power}"/></td>
+                <td><span th:if="${#fields.hasErrors('power')}" th:errors="*{power}"></span></td>
+            </tr>
+            <tr>
+                <td><input type="submit"/></td>
+            </tr>
+        </table>
+    </form>
+    <span th:if="${errorMsg}" th:text="${errorMsg}"></span>
+</div>
+</body>
+</html>

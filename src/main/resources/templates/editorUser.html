@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>修改用户信息</title>
+    <script src="js/jquery-3.5.1.js"></script>
+    <script>
+        $(function () {
+
+            $("#upload").click(function () {
+                $("#multipartFile").click();
+            })
+            $("#multipartFile").change(function () {
+                var formData = new FormData();
+                formData.append("multipartFile",$("#multipartFile")[0].files[0]);
+                $.ajax({
+                    type:"POST",
+                    url:"/uploadUserPicture",
+                    mimeType:"multipart/form-data",
+                    cache:false,
+                    processData:false,
+                    contentType:false,
+                    data:formData,
+                    success:function (msg) {
+                        // console.log(msg);
+                        $("#showImg").attr("src",msg);
+                        $("#picturePath").val(msg);
+                        // var messageContent = messageInput.value.trim();
+
+                    }
+                })
+            })
+        })
+    </script>
+</head>
+<body>
+<div align="center">
+    <img id="showImg" style="border-radius: 25px;border: none;" width="50px" height="50px" th:src="${userInfo.picture}">
+    <form th:action="@{/userEditor}" method="post" th:object="${userInfo}">
+        <table>
+            <tr>
+                <td>用户ID：</td><td><input type="text" th:field="*{userId}" readonly="readonly"/></td>
+            </tr>
+            <tr>
+                <td>用户名：</td><td><input type="text" th:field="*{userName}"/></td>
+                <td><span th:if="${#fields.hasErrors('userName')}" th:errors="*{userName}">用户名错误</span></td>
+            </tr>
+            <tr>
+                <td>密码：</td><td><input type="text" th:field="*{password}" /></td>
+                <td><span th:if="${#fields.hasErrors('password')}" th:errors="*{password}">密码错误</span></td>
+            </tr>
+            <tr>
+                <td>头像</td><td><input type="text" id="picturePath" readonly="readonly" th:field="*{picture}" /></td>
+                <td><button id="upload" type="button">上传头像</button></td>
+            </tr>
+            <tr>
+                <td><input type="submit" value="提交"/></td>
+            </tr>
+        </table>
+        <input type="file" hidden="hidden" id="multipartFile" />
+    </form>
+</div>
+</body>
+</html>

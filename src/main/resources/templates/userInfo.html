@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script type="text/javascript"  th:src="@{/js/jquery-3.5.1.js}" ></script>
+    <script type="text/javascript">
+        // $(function () {
+        //     $("#group_submit").click(function () {
+        //         $.ajax({
+        //             url:"http://localhost:8080"
+        //             method:"GET",
+        //             data:{
+        //                 "userId":
+        //             }
+        //         })
+        //     })
+        // })
+        $(function () {
+            $(".delete_group").click(function () {
+                var groupId = $(this).attr("value");
+                alert(groupId);
+                var a_obj = $(this);
+                $.ajax({
+                    url: "/deleteGroup?groupId="+groupId,
+                    method:"GET",
+                    success:function (resp) {
+                        if(resp=="success"){
+                            a_obj.parent().parent().remove();
+                        }else{
+                            alert(resp);
+                        }
+                    }
+                })
+            })
+        })
+    </script>
+    <meta charset="UTF-8">
+    <title>用户信息</title>
+</head>
+<body>
+<div align="center">
+    <img style="border-radius: 25px;border: none;" width="50px" height="50px" th:src="${userInfo.picture}">
+    <table>
+        <tr>
+            <td>用户id：</td><td th:text="${userInfo.userId}"></td>
+        </tr>
+        <tr>
+            <td>用户名：</td><td th:text="${userInfo.userName}"></td>
+        </tr>
+        <tr>
+            <td>头像：</td><td th:text="${userInfo.picture}"></td>
+        </tr>
+    </table>
+    <a th:href="@{/userEditor}">修改个人资料</a>
+    <br/>
+    <a href="/logOut">点击退出</a>
+</div>
+<div align="center">
+    <a th:href="@{/addGroup.html}">添加群组</a>
+</div>
+<div align="center">
+    <table>
+        <thead>
+        <tr>
+            <td></td>
+        </tr>
+        </thead>
+        <tr>
+            <td>群组id</td>
+            <td>群组口令</td>
+            <td>是否需要口令</td>
+            <td>操作</td>
+        </tr>
+        <tbody>
+        <tr th:each="groupInfo:${groupInfos}">
+            <td th:text="${groupInfo.groupId}"></td>
+            <td th:text="${groupInfo.password}"></td>
+            <td th:text="${groupInfo.isPassword}"></td>
+            <td><a  th:href="@{'/editorGroup?groupId='+${groupInfo.groupId}}">编辑</a><a class="delete_group" th:value="${groupInfo.groupId}" href="#">删除</a>
+            <a th:href="@{'/enterChat?groupId='+${groupInfo.groupId}}">进入群聊</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+<div align="center">
+    <a th:href="@{/joinGroup.html}">加入群聊</a>
+</div>
+
+</body>
+</html>

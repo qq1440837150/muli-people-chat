@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.GroupMessageMapper">
+  <resultMap id="BaseResultMap" type="com.example.demo.domain.GroupMessage">
+    <id column="id" jdbcType="INTEGER" property="id" />
+    <result column="content" jdbcType="VARCHAR" property="content" />
+    <result column="picture" jdbcType="VARCHAR" property="picture" />
+    <result column="record_time" jdbcType="TIMESTAMP" property="recordTime" />
+    <result column="relative_id" jdbcType="INTEGER" property="relativeId" />
+  </resultMap>
+  <resultMap id="ViewResultMap" type="com.example.demo.viewobj.GroupMessageView">
+<!--    content,picture,record_time,group_id,user_id,power-->
+    <result column="content" property="content" />
+    <result column="picture" property="picture" />
+    <result column="record_time" property="recordTime" />
+    <result column="group_time" property="groupId" />
+    <result column="user_time" property="userId" />
+    <result column="power" property="power" />
+  </resultMap>
+  <sql id="Base_Column_List">
+    id, content, picture, record_time, relative_id
+  </sql>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select 
+    <include refid="Base_Column_List" />
+    from group_message
+    where id = #{id,jdbcType=INTEGER}
+  </select>
+  <select id="selectByGroupIdOrderByRecordTime" parameterType="java.lang.Integer" resultMap="ViewResultMap">
+    select content,picture,record_time,group_id,user_id,power
+    from group_message as gm join group_user_relative gur
+        on gm.relative_id = gur.id where group_id=#{groupId} order by record_time desc
+  </select>
+  <select id="selectByRelativeIdOrderByRecordId" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select
+    <include refid="Base_Column_List" />
+    from group_message
+    where relative_id=#{relativeId} order by record_time desc
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from group_message
+    where id = #{id,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="com.example.demo.domain.GroupMessage">
+    insert into group_message (id, content, picture, 
+      record_time, relative_id)
+    values (#{id,jdbcType=INTEGER}, #{content,jdbcType=VARCHAR}, #{picture,jdbcType=VARCHAR}, 
+      #{recordTime,jdbcType=TIMESTAMP}, #{relativeId,jdbcType=INTEGER})
+  </insert>
+  <insert id="insertSelective" parameterType="com.example.demo.domain.GroupMessage">
+    insert into group_message
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="content != null">
+        content,
+      </if>
+      <if test="picture != null">
+        picture,
+      </if>
+      <if test="recordTime != null">
+        record_time,
+      </if>
+      <if test="relativeId != null">
+        relative_id,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="content != null">
+        #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="recordTime != null">
+        #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="relativeId != null">
+        #{relativeId,jdbcType=INTEGER},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.example.demo.domain.GroupMessage">
+    update group_message
+    <set>
+      <if test="content != null">
+        content = #{content,jdbcType=VARCHAR},
+      </if>
+      <if test="picture != null">
+        picture = #{picture,jdbcType=VARCHAR},
+      </if>
+      <if test="recordTime != null">
+        record_time = #{recordTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="relativeId != null">
+        relative_id = #{relativeId,jdbcType=INTEGER},
+      </if>
+    </set>
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.example.demo.domain.GroupMessage">
+    update group_message
+    set content = #{content,jdbcType=VARCHAR},
+      picture = #{picture,jdbcType=VARCHAR},
+      record_time = #{recordTime,jdbcType=TIMESTAMP},
+      relative_id = #{relativeId,jdbcType=INTEGER}
+    where id = #{id,jdbcType=INTEGER}
+  </update>
+</mapper>

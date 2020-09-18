@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>测试websocket</title>
+</head>
+<script src="js/jquery-3.5.1.js"></script>
+<script type="text/javascript">
+    $(function () {
+            var websocket = null;
+            if ('WebSocket' in window) {
+                var url = "ws://localhost:8080/chat/"+$("#groupId").attr("value")+"/"+$("#userId").attr("value");
+                websocket = new WebSocket(url);
+            } else {
+                alert("不支持websocket");
+            }
+            websocket.onopen = function (event) {
+                setMessageInnerHTML(event.data);
+            };
+            websocket.onmessage = function (event) {
+                setMessageInnerHTML(event.data);
+            };
+
+            //连接关闭的回调方法
+            websocket.onclose = function () {
+                setMessageInnerHTML("close");
+            };
+
+            //监听窗口关闭事件，当窗口关闭时，主动去关闭websocket连接，防止连接还没断开就关闭窗口，server端会抛异常。
+            window.onbeforeunload = function () {
+                websocket.close();
+            };
+            //连接发生错误的回调方法
+            websocket.onerror = function () {
+                setMessageInnerHTML("error");
+            };
+
+            function setMessageInnerHTML(innerHTML) {
+                document.getElementById('message').innerHTML += innerHTML;
+            }
+
+            $("#close").click(function () {
+                websocket.close();
+            });
+            $("#send").click(
+                function () {
+                    var message = document.getElementById('text').value;
+                    websocket.send(message);
+                }
+            );
+        }
+    );
+</script>
+<body>
+<input type="hidden" id="groupId" th:value="${groupId}">
+<input type="hidden" id="userId" th:value="${userId}" />
+<textarea id="message">
+    </textarea>
+<br/>
+<textarea id="text"></textarea>
+<br/>
+<input type="button" id="send" value="发送" onclick=""/>
+<br/>
+<input type="button" id="close" value="关闭" onclick=""/>
+</body>
+</html>

@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>编辑群组</title>
+</head>
+<body>
+<div align="center">
+    <form method="post">
+        <table>
+            <tr>
+                <td>群组id</td><td><input type="text" th:value="${groupInfo.groupId}" name="groupId" disabled="true" /> </td>
+            </tr>
+            <tr>
+                <td>群组口令</td><td><input type="text" th:value="${groupInfo.password}" name="password" /> </td>
+            </tr>
+            <tr th:if="${groupInfo.isPassword}">
+                <td>是否需要口令</td>
+                <td><label><input type="radio" name="isPassword" checked="true" value="true"/>是</label></td>
+                <td><label><input type="radio" name="isPassword" value="false"/>否</label></td>
+            </tr>
+            <tr th:unless="${groupInfo.isPassword}">
+                <td>是否需要口令</td>
+                <td><label><input type="radio" name="isPassword" value="true"/>是</label></td>
+                <td><label><input type="radio" name="isPassword" checked="true" value="false"/>否</label></td>
+            </tr>
+            <tr><td><input type="submit" value="提交"/></td></tr>
+        </table>
+    </form>
+</div>
+<div align="center">
+    <table>
+        <thead><tr><th>成员id</th><th>成员权限</th><th>操作</th></tr></thead>
+        <tbody>
+        <tr th:each="member:${groupUserRelatives}">
+            <td th:text="${member.userId}"></td>
+            <td th:text="${member.power}"></td>
+            <td><a th:href="${'/deleteGroupMember?groupId='+member.groupId+'&userId='+member.userId+'&power='+member.power}">删除</a>
+                <a th:href="${'/editorGroupMember?groupId='+member.groupId+'&userId='+member.userId+'&power='+member.power}">修改权限</a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+</div>
+</body>
+</html>

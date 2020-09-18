@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <script src="js/jquery-3.5.1.js" ></script>
+    <script type="text/javascript">
+        $(function () {
+            $("#a_t").click(function () {
+                alert($(this).attr("value"));
+            })
+        })
+    </script>
+</head>
+<body>
+<a id="a_t" href="#" name="test" value="test">标签</a>
+<div align="center">
+    <form>
+        <table>
+            <tr>
+                <td>群id：</td><td><input type="text" name="groupId"/></td>
+            </tr>
+            <tr>
+                <td>群口令：</td><td><input type="text" name="password"></td>
+            </tr>
+            <tr>
+                <td>是否需要口令：</td><td>
+                <input type="radio" name="是" value="true" />
+                <input type="radio" name="否" value="false"/>
+            </td>
+            </tr>
+            <tr>
+               <td><input type="button"  id="group_submit" value="提交" /></td>
+            </tr>
+        </table>
+    </form>
+
+</div>
+<div id="showList" style="position: absolute; top: 100px;right: 100px">
+    <ul>
+        <li value="1">111</li>
+        <li value="3">333</li>
+        <li value="2">222</li>
+    </ul>
+</div>
+<ul style="position: absolute; top: 10px;left: 10px">
+    <li value="1">111</li>
+    <li value="3">333</li>
+    <li value="2">222</li>
+</ul>
+</body>
+</html>

@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>加入群聊</title>
+    <script type="text/javascript"  th:src="@{/js/jquery-3.5.1.js}" ></script>
+    <script type="text/javascript">
+        $(function () {
+            var password = "";
+            var groupId = "";
+            $(".joinPublic").click(function () {
+                var groupId = $(this).attr("value");
+                console.info(groupId);
+                $("#groupId").val(groupId);
+                $("#joinGroup").click();
+            })
+            $("#joinGroup").click(function () {
+                var param=null;
+                var groupId = $("#groupId").val();
+                if($("#pwd").attr("disabled")=="disabled"){
+                    var password = $("#pwd").val();
+                    password=$("#pwd").attr("value");
+                    param="groupId="+groupId+"&password="+password;
+                }else {
+                    param="groupId="+groupId;
+                }
+                $.ajax({
+                    url: "/joinGroup?"+param,
+                    method: "GET",
+                    success:function (resp) {
+                        if(resp=="success"){
+                            alert("添加成功")
+                        }else {
+                            alert("添加失败")
+                        }
+                    }
+                })
+            })
+            $("#groupId").change(function () {
+                textChange();
+            })
+            $("#btn_find").click(function () {
+                textChange();
+            })
+            function textChange() {
+                var groupId = $("#groupId").val();
+                if(groupId==null){
+                    return;
+                }
+                $.ajax({
+                    url:"/queryGroup?groupId="+groupId,
+                    method:"GET",
+                    success:function (resp) {
+                        // alert(resp["isPassword"]);
+                        // alert(resp);
+                        if(resp==""){
+                            // alert("查无")
+                            return;
+                        }
+                        if(resp["isPassword"]){
+                            $("#pwd").removeAttr("disabled")
+                        }else{
+                            $("#pwd").attr("disabled","disabled")
+                        }
+
+                    }
+                })
+            }
+        })
+    </script>
+</head>
+<body>
+<div align="center">
+    <table>
+        <tr>
+            <td>群id：</td><td><input type="text" id="groupId"/></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><input type="button" id="btn_find" value="查询群组"/></td>
+        </tr>
+        <tr>
+            <td><div id="find_result"></div></td>
+        </tr>
+        <tr>
+            <td>群口令：</td>
+            <td><input type="text" id="pwd" /></td>
+        </tr>
+        <tr>
+            <td></td>
+            <td><a id="joinGroup" href="#">点击加入</a></td>
+        </tr>
+    </table>
+</div>
+<div align="center">
+    <table>
+        <thead><tr><th>群id</th><th>操作</th></tr></thead>
+        <tr th:each="groupInfo:${publicGroupInfos}">
+            <td th:text="${groupInfo.groupId}"></td>
+            <td><a href="#" th:value="${groupInfo.groupId}" class="joinPublic">点击加入</a></td>
+        </tr>
+    </table>
+</div>
+</body>
+</html>

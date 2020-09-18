@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>添加群组失败</title>
+</head>
+<body>
+<div align="center">
+    <form action="/addGroup" th:object="${groupInfo}" method="post">
+        <table>
+            <tr>
+                <td>群id：</td><td><input type="text" name="groupId"/></td>
+                <td><span th:if="${#fields.hasErrors('groupId')}" th:errors="*{groupId}">用户id错误</span></td>
+            </tr>
+            <tr>
+                <td>群口令：</td><td><input type="text" name="password"></td>
+            </tr>
+            <tr>
+                <td>是否需要口令：</td>
+            <td>
+                <label><input type="radio" name="isPassword" value="true" />是</label>
+                <label><input type="radio" name="isPassword" value="false"/>否</label>
+            </td>
+            </tr>
+            <tr>
+                <td><input type="submit"  id="group_submit" value="提交" /></td>
+            </tr>
+            <tr>
+                <td><font color="red" th:text="${msg}"></font> </td>
+            </tr>
+        </table>
+    </form>
+</div>
+</body>
+</html>
