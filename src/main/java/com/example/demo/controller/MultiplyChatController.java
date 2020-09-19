@@ -61,10 +61,10 @@ public class MultiplyChatController {
     }
     @PostMapping("/uploadPicture")
     @ResponseBody public String uploadPicture(MultipartFile multipartFile) throws IOException {
-        File root_path = ResourceUtils.getFile ("classpath:static/img");
-        if(!root_path.exists ())root_path.mkdir ();
+        File root_path = ResourceUtils.getFile ("static/img");
+        if(!root_path.exists ())root_path.mkdirs ();
         String fileName = String.format ("pic%d.jpg",System.currentTimeMillis ());
-        String filePath = root_path+"\\"+fileName;
+        String filePath = root_path.getAbsolutePath ()+"/"+fileName;
 
 //        System.out.println (filePath);
         multipartFile.transferTo (new File (filePath));

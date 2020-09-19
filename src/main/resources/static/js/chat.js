@@ -116,6 +116,9 @@ function onMessageReceived(payload) {
     if(message.messageType === 'JOIN') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' joined!';
+    } else if (message.messageType === 'ONLINE') {
+        messageElement.classList.add('event-message');
+        message.content = message.sender + ' 上线了!';
     } else if (message.messageType === 'LEAVE') {
         messageElement.classList.add('event-message');
         message.content = message.sender + ' left!';

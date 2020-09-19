@@ -4,7 +4,8 @@ public class Message {
     public enum MessageType{
         CHAT,
         JOIN,
-        LEAVE
+        LEAVE,
+        ONLINE
     }
     private String sender;
     private String content;

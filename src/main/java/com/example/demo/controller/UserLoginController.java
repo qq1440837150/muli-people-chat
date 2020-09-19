@@ -1,10 +1,13 @@
 package com.example.demo.controller;
 
 import com.example.demo.domain.GroupInfo;
+import com.example.demo.domain.GroupUserRelative;
+import com.example.demo.domain.Message;
 import com.example.demo.domain.UserInfo;
 import com.example.demo.service.GroupInfoService;
 import com.example.demo.service.UserInfoService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.messaging.simp.SimpMessageSendingOperations;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,6 +22,8 @@ import java.util.List;
 
 @Controller
 public class UserLoginController {
+    @Autowired
+    SimpMessageSendingOperations messageTemplate;
     @Autowired
     GroupInfoService groupInfoService;
     @GetMapping("/person")
@@ -36,6 +41,14 @@ public class UserLoginController {
         UserInfo result = userInfoService.selectUserInfoByUserIdAndPassword (userId,password);
         if(result!=null){
             session.setAttribute ("userInfo",result);
+            Message chatMessage = new Message ();
+            chatMessage.setMessageType (Message.MessageType.ONLINE);
+            chatMessage.setSender(result.getUserName ());
+            groupInfoService.selectGroupInfoByUserId (userId).
+                    forEach (
+                            groupInfo -> messageTemplate.convertAndSend("/topic/public/"+groupInfo.getGroupId (), chatMessage
+                            ));
+
             return "redirect:/person";
         }else {
             model.addAttribute ("msg","登陆失败，请验证登陆信息");

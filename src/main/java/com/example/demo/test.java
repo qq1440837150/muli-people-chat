@@ -34,5 +34,12 @@ public class test {
 //
 //
 //        System.out.println (jar_parent);
+        File file = new File ("file:static/");
+        System.out.println (file.exists ());
+        file = new File ("static/");
+        System.out.println (file.exists ());
+        File root_path = ResourceUtils.getFile ("file:static/img/userPicture");
+        System.out.println (root_path.getAbsolutePath ());
+        if(!root_path.exists ())root_path.mkdirs ();;
     }
 }

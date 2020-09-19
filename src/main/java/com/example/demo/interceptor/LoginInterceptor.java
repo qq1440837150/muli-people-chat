@@ -19,6 +19,9 @@ public class LoginInterceptor implements HandlerInterceptor {
         HttpSession session = request.getSession (false);
         response.setCharacterEncoding ("utf-8");
         if(session!=null && session.getAttribute ("userInfo")!=null){
+            if(request.getRequestURI ().equals ("/") || request.getRequestURI ().equals ("/index.html")){
+                response.sendRedirect ("/person");
+            }
             return true;
         }
         response.sendRedirect ("/index.html");
