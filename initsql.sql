@@ -23,6 +23,7 @@ create table group_user_relative(
     id integer primary key auto_increment,
     group_id integer,
     user_id integer,
+    power integer,
     foreign key (group_id) references group_info(group_id),
     foreign key (user_id) references user_info(user_id),
     unique (group_id,user_id)
